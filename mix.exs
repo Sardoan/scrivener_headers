@@ -1,15 +1,15 @@
 defmodule Scrivener.Headers.Mixfile do
   use Mix.Project
 
-  @version "3.1.1"
+  @version "0.0.1"
 
   def project do
-    [app: :scrivener_headers,
+    [app: :scrivener_headers_json,
      version: @version,
      elixir: "~> 1.4",
      package: package(),
      description: """
-     Helpers for paginating API responses with Scrivener and HTTP headers
+     Helpers for paginating API responses with Scrivener and HTTP headers, changes link from string to json
      """,
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
@@ -17,7 +17,7 @@ defmodule Scrivener.Headers.Mixfile do
   end
 
   def package do
-    [maintainers: ["Sean Callan"],
+    [maintainers: ["Sardoan"],
      files: ["lib", "mix.exs", "README*", "LICENSE*"],
      licenses: ["MIT"],
      links: %{github: "https://github.com/doomspork/scrivener_headers"}]
