@@ -28,3 +28,13 @@ use Mix.Config
 # here (which is why it is important to import them last).
 #
 #     import_config "#{Mix.env}.exs"
+config :scrivener_headers_json, link:
+  "link"
+config :scrivener_headers_json, total:
+  "total"
+ config :scrivener_headers_json, per_page:
+  "per-page"
+ config :scrivener_headers_json, total_pages:
+  "total-pages"
+config :scrivener_headers_json, page_number:
+  "page-number"
