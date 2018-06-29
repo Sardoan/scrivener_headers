@@ -24,31 +24,37 @@ defmodule Scrivener.HeadersTests do
     assert headers["per-page"] == "10"
     assert headers["total-pages"] == "5"
     assert headers["page-number"] == "3"
-    links = String.split(headers["link"], ", ")
-    assert ~s(<http://www.example.com/test?foo=bar&page=1>; rel="first") in links
-    assert ~s(<http://www.example.com/test?foo=bar&page=5>; rel="last") in links
-    assert ~s(<http://www.example.com/test?foo=bar&page=4>; rel="next") in links
-    assert ~s(<http://www.example.com/test?foo=bar&page=2>; rel="prev") in links
+    links = Poison.decode!(headers["link"])
+    assert Enum.count(links) == 4
   end
 
   test "doesn't include prev link for first page" do
     page = %Page{page_number: 1, page_size: 10, total_pages: 5, total_entries: 50}
     headers = paginated_headers(page)
-
-    refute headers["link"] =~ ~s(rel="prev")
+    links = Poison.decode!(headers["link"])
+    link = Enum.find(links, fn(x)
+    -> Map.get(x, "prev", nil) != nil
+    end)
+    assert link == nil
   end
 
   test "doesn't include next link for last page" do
     page = %Page{page_number: 5, page_size: 10, total_pages: 5, total_entries: 50}
     headers = paginated_headers(page)
-
-    refute headers["link"] =~ ~s(rel="next")
+    links = Poison.decode!(headers["link"])
+    link = Enum.find(links, fn(x)
+    -> Map.get(x, "next", nil) != nil
+    end)
+    assert link == nil
   end
 
   test "includes ports other than 80 and 443" do
     page = %Page{page_number: 5, page_size: 10, total_pages: 5, total_entries: 50}
     headers = paginated_headers(page, 1337)
-
-    assert headers["link"] =~ ~s(<http://www.example.com:1337/test?foo=bar&page=1>)
+    links = Poison.decode!(headers["link"])
+    link = Enum.find(links, fn(x)
+      -> Map.get(x, "first", nil) != nil
+    end)
+    assert link["first"] == "http://www.example.com:1337/test?foo=bar&page=1"
   end
 end

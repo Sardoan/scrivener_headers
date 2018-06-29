@@ -43,7 +43,7 @@ defmodule Scrivener.Headers do
      link_str(uri, page.total_pages, "last")]
     |> maybe_add_prev(uri, page.page_number, page.total_pages)
     |> maybe_add_next(uri, page.page_number, page.total_pages)
-    |> Enum.join(", ")
+    |> Poison.encode!
   end
 
   defp link_str(%{query: req_query} = uri, page_number, rel) do
@@ -55,7 +55,8 @@ defmodule Scrivener.Headers do
     uri_str =
       %URI{uri | query: query}
       |> URI.to_string()
-    ~s(<#{uri_str}>; rel="#{rel}")
+      %{rel => uri_str}
+    # ~s(<#{uri_str}>; rel="#{rel}")
   end
 
   defp maybe_add_prev(links, uri, page_number, total_pages) when 1 < page_number and page_number <= total_pages do
