@@ -22,13 +22,24 @@ Add to `mix.exs`:
   defp deps do
     [
       # ...
-      {:scrivener_headers, "~> 3.1"}
+      {:scrivener_headers_json,
+    	git: "https://github.com/Sardoan/scrivener_headers"}
       # ...
     ]
   end
 ```
 
 ## Usage
+
+Add this configuration for custom header names:
+
+```elixir
+config :scrivener_headers_json, link: "link"
+config :scrivener_headers_json, total: "total"
+config :scrivener_headers_json, per_page: "per-page"
+config :scrivener_headers_json, total_pages: "total-pages"
+config :scrivener_headers_json, page_number: "page-number"
+```
 
 With `paginate/2` we can easily set our pagination headers:
 
@@ -51,10 +62,10 @@ With `curl --include` we can see our new headers:
 ```shell
 $ curl --include 'https://localhost:4000/people?page=5'
 HTTP/1.1 200 OK
-Link: <http://localhost:4000/people?page=1>; rel="first",
-  <http://localhost:4000/people?page=30>; rel="last",
-  <http://localhost:4000/people?page=6>; rel="next",
-  <http://localhost:4000/people?page=4>; rel="prev"
+Link: [{"first":"http://localhost:4000/people?page=1"},
+  {"last":"http://localhost:4000/people?page=30"},
+  {"next":"http://localhost:4000/people?page=6"},
+  {"prev":"http://localhost:4000/people?page=4"}]
 Total: 300
 Per-Page: 10
 ```
