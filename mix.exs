@@ -34,7 +34,7 @@ defmodule Scrivener.Headers.Mixfile do
 
       {:credo, "~> 0.8.6", only: [:dev, :test]},
       {:ex_doc, "~> 0.15", only: :dev},
-      {:poison, "~> 3.1"}
+      {:poison, "~> 2.2.0"}
     ]
 
   end
